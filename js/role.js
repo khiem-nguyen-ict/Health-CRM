@@ -1,0 +1,24 @@
+// =====================
+// ROLE SWITCHING
+// =====================
+
+let CURRENT_ROLE = "dataentry";
+
+function switchRole(role) {
+  CURRENT_ROLE = role;
+  document
+    .querySelectorAll(".role-tab")
+    .forEach((t) => t.classList.toggle("active", t.dataset.role === role));
+  document
+    .querySelectorAll("[id^=view-]")
+    .forEach((v) => (v.style.display = "none"));
+  document.getElementById(`view-${role}`).style.display = "";
+  loadRoleData(role);
+}
+
+async function loadRoleData(role) {
+  if (role === "dataentry") await loadParticipants();
+  if (role === "health") await loadHealthQueue();
+  if (role === "doctor") await loadDoctorQueue();
+  if (role === "marketing") await loadMarketing();
+}

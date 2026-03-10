@@ -1,0 +1,150 @@
+/* ── Page layout ── */
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: var(--bg);
+      padding: 32px 16px 60px;
+    }
+
+    /* ── Brand header ── */
+    .sr-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .sr-logo {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .sr-logo span { color: var(--blue); }
+    .sr-tagline {
+      font-size: .83rem;
+      color: var(--muted);
+    }
+
+    /* ── Card wrapper ── */
+    .sr-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    }
+
+    .sr-card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .sr-card-subtitle {
+      font-size: .84rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* ── Field error messages ── */
+    .field-error {
+      font-size: .78rem;
+      color: #ef4444;
+      margin-top: 4px;
+      min-height: 16px;
+      display: block;
+    }
+    .form-input.input-error,
+    .form-select.input-error {
+      border-color: #ef4444 !important;
+      background: rgba(239,68,68,.04);
+    }
+
+    /* ── Consent row ── */
+    .consent-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .consent-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+    .consent-row label {
+      font-size: .86rem;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1.5;
+    }
+
+    /* ── Submit button ── */
+    #submit-btn {
+      width: 100%;
+      justify-content: center;
+      font-size: 1rem;
+      padding: 13px;
+      margin-top: 8px;
+      border-radius: 10px;
+    }
+
+    /* ── Divider ── */
+    .sr-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 22px 0;
+    }
+
+    /* ── Success screen ── */
+    #success-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      padding: 8px 0;
+    }
+    .success-icon {
+      font-size: 3.6rem;
+      line-height: 1;
+    }
+    .success-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .success-subtitle {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 340px;
+    }
+    .success-name {
+      color: var(--blue);
+    }
+    #success-screen .btn {
+      margin-top: 8px;
+      padding: 11px 28px;
+      border-radius: 10px;
+    }
+
+    /* ── Footer ── */
+    .sr-footer {
+      margin-top: 20px;
+      font-size: .76rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .sr-footer a { color: var(--blue); text-decoration: none; }
