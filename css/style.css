@@ -59,23 +59,47 @@ body {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  font-size: 28px;
   opacity: 0.3;
   animation: floatIcon var(--s) ease-in-out infinite;
   animation-delay: var(--d);
   will-change: transform, opacity;
-  filter: blur(0.5px);
+  color: #fff;
+}
+
+/* Screen reader only class for accessibility fallbacks */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* SVG Icons styling */
+.float-icon.svg-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.float-icon.svg-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* Brand text icons (ADCREW VIETNAM) */
 .float-icon.brand-icon {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--blue);
-  background: rgba(255, 255, 255, 0.1);
-  padding: 4px 10px;
-  border-radius: 20px;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.float-icon.brand-icon svg {
+  height: 28px;
+  width: auto;
 }
 
 /* Floating animation with gentle drift */
