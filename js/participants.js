@@ -21,17 +21,20 @@ function filterLocalParticipants() {
   renderParticipants(filtered);
 }
 
-async function loadParticipants() {
-  document.getElementById("s1-search").value = "";
-  const btn = document.querySelector('[onclick="loadParticipants()"]');
-  setLoading(btn, true, null, "Đang lấy danh sách khách hàng");
-
+async function loadParticipants(manually = true) {
+    const btn = document.querySelector('[onclick="loadParticipants()"]');
+  if (manually) {
+    document.getElementById("s1-search").value = "";
+    setLoading(btn, true, null, "Đang lấy danh sách khách hàng");
+  }
   const rows = await apiGet("Participants", "status", "pending");
   const pending = rows.filter((r) => r.status === "pending");
   pending.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   allParticipants = pending;
-  renderParticipants(allParticipants);
-  setLoading(btn, false);
+  if (manually) {
+    renderParticipants(allParticipants);
+    setLoading(btn, false);
+  } else filterLocalParticipants();
 }
 
 function renderParticipants(rows) {

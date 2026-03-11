@@ -16,9 +16,29 @@ function switchRole(role) {
   loadRoleData(role);
 }
 
-async function loadRoleData(role) {
-  if (role === "dataentry") await loadParticipants();
-  if (role === "health") await loadHealthQueue();
-  if (role === "doctor") await loadDoctorQueue();
-  if (role === "marketing") await loadMarketing();
+async function loadRoleData(role, manually = true) {
+  if (role === "dataentry") await loadParticipants(manually);
+  else if (role === "health") await loadHealthQueue(manually);
+  else if (role === "doctor") await loadDoctorQueue(manually);
+  else if (role === "marketing") await loadMarketing(manually);
 }
+
+// =====================
+// AUTO REFRESH
+// =====================
+
+// Set up refresh timer after DOM is loaded (runs every 30 seconds)
+document.addEventListener("DOMContentLoaded", () => {
+  setInterval(() => {
+    // Skip refresh if a modal is open (common indicator of active user interaction)
+    const openModal = document.querySelector(
+      '.modal[style*="block"], .modal[style*="flex"]',
+    );
+    const activeForm = document.activeElement?.closest("form");
+
+    // Only refresh if no modal is open and no form field is focused
+    if (!openModal && !activeForm) {
+      loadRoleData(CURRENT_ROLE, false);
+    }
+  }, 60000);
+});

@@ -6,7 +6,7 @@ let allDoctorQueue = [];
 let allDoctorQueueHealthRows = [];
 let selectedParticipantInDoctorTab = null;
 
-function filterLocalDoctorQueue(rows) {
+function filterLocalDoctorQueue() {
   const searchTerm = document
     .getElementById("d-search")
     .value.toLowerCase()
@@ -45,11 +45,12 @@ function reanderDoctorQueueRows(rows) {
     .join("");
 }
 
-async function loadDoctorQueue() {
-  document.getElementById("d-search").value = "";
+async function loadDoctorQueue(manually = true) {
   const btn = document.querySelector('[onclick="loadDoctorQueue()"]');
-  setLoading(btn, true, null, "Đang lấy danh sách chờ tư vấn");
-
+  if (manually) {
+    document.getElementById("d-search").value = "";
+    setLoading(btn, true, null, "Đang lấy danh sách chờ tư vấn");
+  }
   const rows = await apiGet("Participants", "status", "health");
   const healthRows = await apiGet("HealthData");
   const ready = rows.filter((r) => r.status === "health");
@@ -58,12 +59,14 @@ async function loadDoctorQueue() {
   allDoctorQueue = ready;
   allDoctorQueueHealthRows = healthRows;
 
-  reanderDoctorQueueRows(allDoctorQueue);
-  setLoading(btn, false);
+  if (manually) {
+    reanderDoctorQueueRows(allDoctorQueue);
+    setLoading(btn, false);
+  } else filterLocalDoctorQueue();
 }
 
 async function selectParticipantDoctor(id) {
-    selectedParticipantInDoctorTab = allDoctorQueue.find((r) => r.id === id);
+  selectedParticipantInDoctorTab = allDoctorQueue.find((r) => r.id === id);
   if (!selectedParticipantInDoctorTab) {
     alert("Có gì đó sai sai! Tải lại dữ liệu xem sao?");
     return;

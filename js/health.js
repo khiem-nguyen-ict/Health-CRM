@@ -57,22 +57,26 @@ function filterLocalHealthQueue() {
   renderHealhQueueRows(filtered);
 }
 
-async function loadHealthQueue() {
-  document.getElementById("h-search").value = "";
+async function loadHealthQueue(manually = true) {
   const btn = document.querySelector('[onclick="loadHealthQueue()"]');
-  setLoading(
-    btn,
-    true,
-    null,
-    "Đang lấy danh sách chờ cập nhật thông tin sức khỏe",
-  );
+  if (manually) {
+    document.getElementById("h-search").value = "";
+    setLoading(
+      btn,
+      true,
+      null,
+      "Đang lấy danh sách chờ cập nhật thông tin sức khỏe",
+    );
+  }
   const rows = await apiGet("Participants", "status", "pending");
 
   const pending = rows.filter((r) => r.status === "pending");
   pending.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   allHealthQueue = pending;
-  renderHealhQueueRows(pending);
-  setLoading(btn, false);
+  if (manually) {
+    renderHealhQueueRows(pending);
+    setLoading(btn, false);
+  } else filterLocalHealthQueue();
 }
 
 async function selectParticipantHealth(id) {

@@ -1,16 +1,18 @@
 // =====================
 // STEP 4: MARKETING
 // =====================
-async function loadMarketing() {
+async function loadMarketing(manually = true) {
+  if (manually) {
+    setLoading(null, true, null, "Đang lấy danh sách marketing...");
+  }
   const rows = await apiGet("Marketing");
   const tbody = document.getElementById("marketing-list");
   if (!rows.length) {
     tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">📣</div><p>Chưa có ai trong danh sách marketing</p></div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML = rows
-    .map(
-      (r) => `
+  } else {
+    tbody.innerHTML = rows
+      .map(
+        (r) => `
     <tr>
       <td class="td-name">${r.name || ""}</td>
       <td class="td-phone">${r.phone || ""}</td>
@@ -19,8 +21,12 @@ async function loadMarketing() {
       <td style="text-align: center;">${r.msg3SentAt ? `<span style="color:var(--green);font-size:.8rem">✅</span>` : `<button class="btn btn-ghost btn-sm" onclick="sendMsg('${r.id}',3,this)">Gửi</button>`}</td>
       <td style="text-align: center;">${r.zaloImported ? '<span class="badge badge-purple" style="font-size:.72rem;width:58px;">Zalo ✓</span>' : '<span class="badge" style="font-size:.72rem;background:rgba(100,116,139,.12);color:#64748b">Chưa nhập</span>'}</td>
     </tr>`,
-    )
-    .join("");
+      )
+      .join("");
+  }
+  if (manually) {
+    setLoading(null, false);
+  }
 }
 
 async function sendMsg(id, num, btn) {
