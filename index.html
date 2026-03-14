@@ -633,9 +633,16 @@
             <!-- Nút đóng — góc trên phải, frosted glass -->
             <button class="webcam-close" onclick="closeWebcam()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
-                    stroke-linecap="round">
+                     stroke-linecap="round">
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+
+            <!-- Nút chuyển đổi camera — giữa trên -->
+            <button class="webcam-switch" onclick="switchWebcamFacing()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 4v2M12 18v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M16.07 4.93l-1.41-1.41"/>
                 </svg>
             </button>
 
@@ -643,7 +650,7 @@
             <button class="webcam-capture" onclick="capturePhoto()">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
                     <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1
-                         2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                          2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                     <circle cx="12" cy="13" r="4" fill="none" stroke="white" stroke-width="2" />
                 </svg>
             </button>
@@ -898,7 +905,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="card">
+                        <div class="card" id="health-index-div">
                             <div class="card-title">📊 Chỉ số sức khỏe xương khớp</div>
                             <div class="metric-grid">
                                 <div class="form-field">
@@ -1167,8 +1174,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="./js/media-pipe.js?v=v1.2.7.20260309062908"></script>
-    <script src="./js/role.js?v=v1.2.7.20260309062908"></script>
     <script src="./js/app.js?v=v1.2.7.20260309062908"></script>
+    <script src="./js/role.js?v=v1.2.7.20260309062908"></script>
     <script src="./js/participants.js?v=v1.2.7.20260309062908"></script>
     <script src="./js/health.js?v=v1.2.7.20260309062908"></script>
     <script src="./js/marketing.js?v=v1.2.7.20260309062908"></script>

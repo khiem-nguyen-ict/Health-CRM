@@ -7,6 +7,7 @@ let PHOTO_DATA_SIDE = null;
 let REPORT_AS_PHOTO = null;
 let webcamStream = null; // ← cache stream, chỉ xin quyền 1 lần
 let activePhotoSlot = "front"; // 'front' | 'side'
+let webcamCurrentFacing = "environment"; // Start with back camera if available
 
 let selectedParticipantInHealthTab = null;
 let allHealthQueue = [];
@@ -75,6 +76,10 @@ async function loadHealthQueue(manually = true) {
   if (_.isEqual(allHealthQueue, pending)) {
     if (manually) {
       setLoading(btn, false);
+    }
+    if(allHealthQueue.length <= 0) {
+        // fix bug: reset view
+        renderHealhQueueRows([]);
     }
     return;
   }
@@ -172,6 +177,9 @@ function cancelHealth() {
 
 async function saveHealth() {
   if (!selectedParticipantInHealthTab) return;
+
+  let localSelectedParticipant = selectedParticipantInHealthTab;
+
   const height = document.getElementById("h-height").value;
   const weight = document.getElementById("h-weight").value;
   const bmi = document.getElementById("h-bmi").value;
@@ -192,10 +200,23 @@ async function saveHealth() {
   const btn = document.querySelector('[onclick="saveHealth()"]');
   setLoading(btn, true, null, "Đang lưu thông tin sức khỏe");
   const id = "H" + Date.now();
+
+  // Trick to save posting time
+  allHealthQueue = allHealthQueue.filter(
+    (item) => item.id !== localSelectedParticipant.id,
+  );
+  cancelHealth();
+  renderHealhQueueRows(allHealthQueue);
+  setLoading(btn, false);
+  toast(
+    `Đã lưu dữ liệu sức khỏe: ${localSelectedParticipant.name}`,
+    "success",
+  );
+
   await apiPost("append", "HealthData", {
     data: [
       id,
-      selectedParticipantInHealthTab.id,
+      localSelectedParticipant.id,
       height,
       weight,
       bmi,
@@ -207,20 +228,9 @@ async function saveHealth() {
     ],
   });
   await apiPost("update", "Participants", {
-    id: selectedParticipantInHealthTab.id,
+    id: localSelectedParticipant.id,
     updates: { status: "health" },
   });
-  setLoading(btn, false);
-  toast(
-    `Đã lưu dữ liệu sức khỏe: ${selectedParticipantInHealthTab.name}`,
-    "success",
-  );
-
-  allHealthQueue = allHealthQueue.filter(
-    (item) => item.id !== selectedParticipantInHealthTab.id,
-  );
-  cancelHealth();
-  renderHealhQueueRows(allHealthQueue);
 }
 
 // =====================
@@ -241,12 +251,18 @@ async function openWebcam(slot = "front") {
 
   try {
     webcamStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" },
+      video: { facingMode: webcamCurrentFacing },
     });
     video.srcObject = webcamStream;
   } catch {
-    toast("Không thể truy cập camera. Thử chọn file ảnh.", "error");
-    closeWebcam();
+    // Fallback to any camera if preferred facing mode not available
+    try {
+      webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      video.srcObject = webcamStream;
+    } catch (fallbackError) {
+      toast("Không thể truy cập camera. Thử chọn file ảnh.", "error");
+      closeWebcam();
+    }
   }
 }
 
@@ -269,6 +285,22 @@ async function capturePhoto() {
   await setPhotoPreview(data, activePhotoSlot);
 }
 
+// [CHANGED 4/3] switchWebcamFacing: chuyển đổi giữa camera trước và sau
+function switchWebcamFacing() {
+  // Toggle between front and back camera
+  webcamCurrentFacing = webcamCurrentFacing === "user" ? "environment" : "user";
+
+  // If we have an active stream, restart it with the new facing mode
+  if (webcamStream) {
+    // Stop existing tracks
+    webcamStream.getTracks().forEach((track) => track.stop());
+    webcamStream = null;
+
+    // Reopen webcam with new facing mode
+    openWebcam(activePhotoSlot);
+  }
+}
+
 function handlePhotoFile(e, slot = "front") {
   const file = e.target.files[0];
   if (!file) return;
@@ -277,7 +309,7 @@ function handlePhotoFile(e, slot = "front") {
   const reader = new FileReader();
   reader.onload = async (ev) => {
     await setPhotoPreview(ev.target.result, slot);
-    toast("Đã tải ảnh", "success");
+    toast("Đã tải ảnh thảnh công!", "success");
   };
   reader.readAsDataURL(file);
 }
@@ -352,10 +384,15 @@ async function setPhotoPreview(src, slot = "front") {
     REPORT_AS_PHOTO = canvas.toDataURL("image/jpeg", 0.7);
   } catch (err) {
     console.warn("Không thể xuất report thành ảnh:", err);
+    toast(`Có lỗi trong quá trình phân tích. Vui lòng chụp ảnh và thử lại.`, "error");
+    setLoading(null, false);
+    return;
   }
   // ─────────────────────────────────────────────────────────────────────
 
   setLoading(null, false);
+  toast(`Vui lòng nhập các chỉ số sức khỏe xương khớp.`, "success");
+  scrollToForm("health-index-div");
 }
 
 // Giải phóng camera khi đóng tab / reload trang

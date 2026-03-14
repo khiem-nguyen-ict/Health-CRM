@@ -31,15 +31,20 @@ async function loadRoleData(role, manually = true) {
 // Set up refresh timer after DOM is loaded (runs every 30 seconds)
 document.addEventListener("DOMContentLoaded", () => {
   setInterval(() => {
-    // Skip refresh if a modal is open (common indicator of active user interaction)
-    const openModal = document.querySelector(
-      '.modal[style*="block"], .modal[style*="flex"]',
-    );
-    const activeForm = document.activeElement?.closest("form");
+    // System idle, do not refresh during posting in background
+    if (SYSTEM_PENDING_REQUESTS <= 0) {
+      // Skip refresh if a modal is open (common indicator of active user interaction)
+      const openModal = document.querySelector(
+        '.modal[style*="block"], .modal[style*="flex"]',
+      );
+      const activeForm = document.activeElement?.closest("form");
 
-    // Only refresh if no modal is open and no form field is focused
-    if (!openModal && !activeForm) {
-      loadRoleData(CURRENT_ROLE, false);
+      // Only refresh if no modal is open and no form field is focused
+      if (!openModal && !activeForm) {
+        loadRoleData(CURRENT_ROLE, false);
+      }
+    } else {
+        console.info("System is busy, skip background refreshing!");
     }
   }, REFRESH_INTERVAL);
 });

@@ -102,8 +102,9 @@ function renderPostureReport(
       '    <img src="' + src + '" style="',
       "      width:100%;",
       "      display:block;",
-      "      object-fit:cover;",
-      "      max-height:200px;",
+      "      object-fit:contain;",
+      "      max-height:260px;",
+      "      height:auto;",
       '    " />',
       "  </div>",
       '  <div style="',
@@ -161,11 +162,32 @@ function renderPostureReport(
     allStatuses.push(sideResult.B1.status);
   }
 
+  //   var scoreMap = { normal: 0, mild: 1, moderate: 2, severe: 3 };
+  //   var worst = allStatuses.reduce(function (w, s) {
+  //     return (scoreMap[s] || 0) > (scoreMap[w] || 0) ? s : w;
+  //   }, "normal");
+
   var scoreMap = { normal: 0, mild: 1, moderate: 2, severe: 3 };
-  var worst = allStatuses.reduce(function (w, s) {
-    return (scoreMap[s] || 0) > (scoreMap[w] || 0) ? s : w;
-  }, "normal");
-  var overallColor = statusColor[worst];
+
+  var scores = allStatuses.map(function (s) {
+    return scoreMap[s] || 0;
+  });
+
+  var avgScore =
+    scores.reduce(function (sum, v) {
+      return sum + v;
+    }, 0) / scores.length;
+
+  var overall;
+
+  if (avgScore < 0.5) overall = "normal";
+  else if (avgScore < 1.5) overall = "mild";
+  else if (avgScore < 2.5) overall = "moderate";
+  else overall = "severe";
+
+  var overallColor = statusColor[overall];
+
+  //var overallColor = statusColor[worst];
 
   var now = new Date();
   var dateStr =
@@ -185,7 +207,7 @@ function renderPostureReport(
   var html = [
     // ── Wrapper ngoài: mô phỏng trang giấy A4 ──────────────────────────────
     '<div style="',
-    "font-family:'Georgia','Times New Roman',serif;",
+    "font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;",
     "background:#fff;",
     "width:100%;",
     "max-width:780px;",
@@ -563,7 +585,7 @@ function renderPostureReport(
     "      hiệu quả tổng thể cao hơn nhiều startup posture AI (~6/10) và có thể hỗ trợ đánh giá tư thế khi kết hợp chuyên môn lâm sàng.",
     "    </span>",
     "  </div>",
-    "  <div style=\"font-size:9.5px;color:#aab4c0;font-family:'Courier New',monospace;text-align:right;\">",
+    "  <div style=\"font-size:9.5px;color:#aab4c0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;text-align:right;\">",
     "    " +
       reportId +
       '<br/><span style="color:#c8d0da;">' +

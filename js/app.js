@@ -6,6 +6,8 @@ const CONFIG = {
   ssId: "1iY0VJaIvLGDYi2A4TsBXAXu6jgTz-GhXd8p75Gpg4iw",
 };
 
+var SYSTEM_PENDING_REQUESTS = 0;
+
 function formatDateTimeVN(isoString) {
   const date = new Date(isoString);
 
@@ -81,6 +83,7 @@ function scrollToForm(elemId) {
 // =====================
 
 async function apiGet(sheet = "all", filterCol = null, filterVal = null) {
+  SYSTEM_PENDING_REQUESTS++;
   let fetchUrl = `${CONFIG.url}?action=getAll&sheet=${sheet}&ss=${CONFIG.ssId}`;
   if (filterCol && filterVal) {
     const params = new URLSearchParams({
@@ -102,14 +105,17 @@ async function apiGet(sheet = "all", filterCol = null, filterVal = null) {
       toast("Lỗi kết nối với Google Sheet không có dữ liệu!", "error");
       return {};
     }
+    SYSTEM_PENDING_REQUESTS--;
     return d.data;
   } catch (e) {
+    SYSTEM_PENDING_REQUESTS--;
     toast("Lỗi kết nối Google Sheet: " + e.message, "error");
     return {};
   }
 }
 
 async function apiPost(action, sheet, payload) {
+  SYSTEM_PENDING_REQUESTS++;
   try {
     const r = await fetch(CONFIG.url, {
       method: "POST",
@@ -125,9 +131,15 @@ async function apiPost(action, sheet, payload) {
       }),
     });
     const text = await r.text();
+    SYSTEM_PENDING_REQUESTS--;
     return JSON.parse(text);
   } catch (e) {
-    toast("Lỗi ghi dữ liệu: " + e.message, "error");
+    SYSTEM_PENDING_REQUESTS--;
+    toast(
+      `Lỗi ghi dữ liệu. Bạn vui lòng nhập lại thông tin cho ${payload.name ?? "khách vừa rồi"}. ` +
+        e.message,
+      "error",
+    );
     return null;
   }
 }

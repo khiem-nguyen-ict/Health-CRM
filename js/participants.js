@@ -34,6 +34,10 @@ async function loadParticipants(manually = true) {
     if (manually) {
       setLoading(btn, false);
     }
+    if(allParticipants.length <= 0) {
+        // fix bug: reset view
+        renderParticipants([]);
+    }
     return;
   }
   allParticipants = pending;
@@ -106,6 +110,13 @@ async function addParticipant() {
     createdAt: now,
   };
 
+  // Trick to save waiting time, save later
+  clearParticipantForm();
+  toast(`Đã lưu: ${name}`, "success");
+  allParticipants.unshift(newParticipant);
+  renderParticipants(allParticipants);
+  setLoading(btn, false);
+
   await apiPost("append", "Participants", {
     data: [
       id,
@@ -119,13 +130,6 @@ async function addParticipant() {
       now,
     ],
   });
-  setLoading(btn, false);
-  toast(`Đã lưu: ${name}`, "success");
-  clearParticipantForm();
-
-  allParticipants.unshift(newParticipant);
-
-  renderParticipants(allParticipants);
 }
 
 function clearParticipantForm() {

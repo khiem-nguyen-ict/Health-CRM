@@ -60,6 +60,10 @@ async function loadDoctorQueue(manually = true) {
     if (manually) {
       setLoading(btn, false);
     }
+    if(allDoctorQueue.length <= 0) {
+        // fix bug: reset view
+        reanderDoctorQueueRows([]);
+    }
     return;
   }
   allDoctorQueue = ready;
@@ -116,7 +120,6 @@ function cancelDoctor() {
   selectedParticipantInDoctorTab = null;
   document.getElementById("d-form").style.display = "none";
   document.getElementById("d-results").innerHTML = "";
-  //document.getElementById("d-doctor-name").value = "";
   document.getElementById("d-diagnosis").value = null;
   document.getElementById("d-advice").value = null;
   document.getElementById("d-product").value = null;
@@ -125,6 +128,7 @@ function cancelDoctor() {
 
 async function saveConsultation() {
   if (!selectedParticipantInDoctorTab) return;
+  let localSelectedParticipant = selectedParticipantInDoctorTab;
   const doctorName = document.getElementById("d-doctor-name").value.trim();
   const diagnosis = document.getElementById("d-diagnosis").value;
   const advice = document.getElementById("d-advice").value.trim();
@@ -142,10 +146,19 @@ async function saveConsultation() {
   const btn = document.querySelector('[onclick="saveConsultation()"]');
   setLoading(btn, true, null, "Đang lưu thông tin tư vấn");
   const id = "C" + Date.now();
+
+  allDoctorQueue = allDoctorQueue.filter(
+    (item) => item.id !== localSelectedParticipant.id,
+  );
+  cancelDoctor();
+  reanderDoctorQueueRows(allDoctorQueue);
+  setLoading(btn, false);
+  toast(`Đã lưu tư vấn: ${localSelectedParticipant.name}`, "success");
+
   await apiPost("append", "Consultations", {
     data: [
       id,
-      selectedParticipantInDoctorTab.id,
+      localSelectedParticipant.id,
       doctorName,
       diagnosis,
       advice,
@@ -155,7 +168,7 @@ async function saveConsultation() {
     ],
   });
   await apiPost("update", "Participants", {
-    id: selectedParticipantInDoctorTab.id,
+    id: localSelectedParticipant.id,
     updates: { status: "consulted" },
   });
 
@@ -164,21 +177,13 @@ async function saveConsultation() {
   await apiPost("append", "Marketing", {
     data: [
       mId,
-      selectedParticipantInDoctorTab.id,
-      selectedParticipantInDoctorTab.name,
-      selectedParticipantInDoctorTab.phone,
+      localSelectedParticipant.id,
+      localSelectedParticipant.name,
+      localSelectedParticipant.phone,
       "",
       "",
       "",
       false,
     ],
   });
-  setLoading(btn, false);
-  toast(`Đã lưu tư vấn: ${selectedParticipantInDoctorTab.name}`, "success");
-
-  allDoctorQueue = allDoctorQueue.filter(
-    (item) => item.id !== selectedParticipantInDoctorTab.id,
-  );
-  cancelDoctor();
-  reanderDoctorQueueRows(allDoctorQueue);
 }
