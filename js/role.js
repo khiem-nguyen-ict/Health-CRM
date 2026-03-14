@@ -2,6 +2,7 @@
 // ROLE SWITCHING
 // =====================
 
+const REFRESH_INTERVAL = 30000; // 30 seconds
 let CURRENT_ROLE = "dataentry";
 
 function switchRole(role) {
@@ -40,5 +41,5 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!openModal && !activeForm) {
       loadRoleData(CURRENT_ROLE, false);
     }
-  }, 60000);
+  }, REFRESH_INTERVAL);
 });

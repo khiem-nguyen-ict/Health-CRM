@@ -22,7 +22,7 @@ function filterLocalParticipants() {
 }
 
 async function loadParticipants(manually = true) {
-    const btn = document.querySelector('[onclick="loadParticipants()"]');
+  const btn = document.querySelector('[onclick="loadParticipants()"]');
   if (manually) {
     document.getElementById("s1-search").value = "";
     setLoading(btn, true, null, "Đang lấy danh sách khách hàng");
@@ -30,6 +30,12 @@ async function loadParticipants(manually = true) {
   const rows = await apiGet("Participants", "status", "pending");
   const pending = rows.filter((r) => r.status === "pending");
   pending.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (_.isEqual(allParticipants, pending)) {
+    if (manually) {
+      setLoading(btn, false);
+    }
+    return;
+  }
   allParticipants = pending;
   if (manually) {
     renderParticipants(allParticipants);
@@ -39,13 +45,12 @@ async function loadParticipants(manually = true) {
 
 function renderParticipants(rows) {
   const tbody = document.getElementById("participant-list");
-  const pending = rows.filter((r) => r.status === "pending"); // ← CHỈ LỌC PENDING
-  document.getElementById("list-count").textContent = pending.length;
-  if (!pending.length) {
+  document.getElementById("list-count").textContent = rows.length;
+  if (!rows.length) {
     tbody.innerHTML = `<tr><td colspan="5">${IconAllDone({ message: "Không có kết quả nào - hàng chờ trống hoặc không khớp với tìm kiếm." })}</td></tr>`;
     return;
   }
-  tbody.innerHTML = pending
+  tbody.innerHTML = rows
     .map(
       (r) => `
 <tr>

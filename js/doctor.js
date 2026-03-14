@@ -56,6 +56,12 @@ async function loadDoctorQueue(manually = true) {
   const ready = rows.filter((r) => r.status === "health");
   ready.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+  if (_.isEqual(allDoctorQueue, ready)) {
+    if (manually) {
+      setLoading(btn, false);
+    }
+    return;
+  }
   allDoctorQueue = ready;
   allDoctorQueueHealthRows = healthRows;
 

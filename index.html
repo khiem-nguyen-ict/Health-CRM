@@ -820,7 +820,7 @@
 
                 <div id="h-form" style="display:none">
                     <div class="patient-card" id="h-patient-info"></div>
-                    <div class="grid-2">
+                    <div class="grid-1">
                         <div class="card">
                             <div class="card-title">📷 Ảnh bệnh nhân</div>
 
@@ -833,7 +833,7 @@
                                         style="font-size:.78rem; font-weight:600; color:var(--muted); text-align:center; letter-spacing:.03em;">
                                         MẶT TRƯỚC
                                     </div>
-                                    <div class="photo-area" id="photo-area-front" style="height: 160px; cursor: pointer; position: relative; overflow: hidden; border-radius: 10px; 
+                                    <div class="photo-area" id="photo-area-front" style="height: 320px; cursor: pointer; position: relative; overflow: hidden; border-radius: 10px; 
                    background: var(--surface) url('./images/front-placeholder.jpg') center/cover no-repeat; 
                    border: 2px dashed var(--border); display: flex; flex-direction: column; 
                    align-items: center; justify-content: center; gap: 4px; transition: border-color 0.2s;"
@@ -857,7 +857,7 @@
                                         style="font-size:.78rem; font-weight:600; color:var(--muted); text-align:center; letter-spacing:.03em;">
                                         MẶT NGHIÊNG
                                     </div>
-                                    <div class="photo-area" id="photo-area-side" style="height: 160px; cursor: pointer; position: relative; overflow: hidden; border-radius: 10px; 
+                                    <div class="photo-area" id="photo-area-side" style="height: 320px; cursor: pointer; position: relative; overflow: hidden; border-radius: 10px; 
                    background: var(--surface) url('./images/side-placeholder.jpg') center/cover no-repeat; 
                    border: 2px dashed var(--border); display: flex; flex-direction: column; 
                    align-items: center; justify-content: center; gap: 4px; transition: border-color 0.2s;"
@@ -1164,6 +1164,8 @@
     </div>
 
     <div id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="./js/media-pipe.js?v=v1.2.7.20260309062908"></script>
     <script src="./js/role.js?v=v1.2.7.20260309062908"></script>
     <script src="./js/app.js?v=v1.2.7.20260309062908"></script>

@@ -72,6 +72,12 @@ async function loadHealthQueue(manually = true) {
 
   const pending = rows.filter((r) => r.status === "pending");
   pending.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (_.isEqual(allHealthQueue, pending)) {
+    if (manually) {
+      setLoading(btn, false);
+    }
+    return;
+  }
   allHealthQueue = pending;
   if (manually) {
     renderHealhQueueRows(pending);
