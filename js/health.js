@@ -309,7 +309,7 @@ function handlePhotoFile(e, slot = "front") {
   const reader = new FileReader();
   reader.onload = async (ev) => {
     await setPhotoPreview(ev.target.result, slot);
-    toast("Đã tải ảnh thảnh công!", "success");
+    //toast("Đã tải ảnh thảnh công!", "success"); // Too many messages
   };
   reader.readAsDataURL(file);
 }

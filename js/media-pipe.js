@@ -72,12 +72,12 @@ var MediaPipePosture = (function () {
     var shoulderMid = _mid(lm[11], lm[12]);
     var hipMid = _mid(lm[23], lm[24]);
 
-    var A1 = _lateralAngle(shoulderMid, hipMid);
-    var A2 = _horizontalAngle(lm[7], lm[8]);
-    var A3 = _horizontalAngle(lm[11], lm[12]);
-    var A4 = _horizontalAngle(lm[23], lm[24]);
-    var A5 = _horizontalAngle(lm[25], lm[26]);
-    var A6 = _horizontalAngle(lm[27], lm[28]);
+    var A1 = Math.abs(_lateralAngle(shoulderMid, hipMid));
+    var A2 = Math.abs(_horizontalAngle(lm[7], lm[8]));
+    var A3 = Math.abs(_horizontalAngle(lm[11], lm[12]));
+    var A4 = Math.abs(_horizontalAngle(lm[23], lm[24]));
+    var A5 = Math.abs(_horizontalAngle(lm[25], lm[26]));
+    var A6 = Math.abs(_horizontalAngle(lm[27], lm[28]));
 
     var confidence = _avgVisibility([
       lm[7],
@@ -158,7 +158,7 @@ var MediaPipePosture = (function () {
     var dx = ear.x - shoulder.x;
     var dy = Math.abs(ear.y - shoulder.y);
 
-    var B1 = +(Math.atan(dx / dy) * (180 / Math.PI)).toFixed(1);
+    var B1 = Math.abs(+(Math.atan(dx / dy) * (180 / Math.PI)).toFixed(1));
 
     var spineAngle = _angle3(ear, shoulder, hip);
 
