@@ -72,6 +72,7 @@ find . -type f \( \
   -o -name "*.webm" -o -name "*.mp3"  -o -name "*.wav"  -o -name "*.ogg" \
   -o -name "*.woff" -o -name "*.woff2" -o -name "*.ttf" -o -name "*.otf" \
   -o -name "*.eot"  -o -name "*.pdf" \
+  -o -name ".htaccess" \
 \) \
   | grep -vE '^\./(\.[^/]+|dist)/' \
   | while read -r file; do

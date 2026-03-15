@@ -43,7 +43,6 @@ function statusBadge(status) {
 const SKIP_INIT = true;
 
 async function loadConfigAndStart(role = "dataentry") {
-  const btn = document.querySelector('[onclick="loadConfigAndStart()"]');
   startApp(role);
 }
 
@@ -51,19 +50,21 @@ function openAppStartUpScreen() {
   document.getElementById("overlay").style.display = "flex";
 }
 
-function startApp(role) {
+function updateUI() {
   document.getElementById("overlay").style.display = "none";
   document.getElementById("app").style.display = "block";
   document.getElementById("conn-label").textContent = "Google Sheets";
   document.getElementById("conn-dot").style.background = "var(--green)";
+}
+
+async function startApp(role) {
   if (!SKIP_INIT) {
-    initSheets().then(() => {
-      if (role) {
-        switchRole(role);
-      }
-    });
+    await initSheets();
+    if (role) {
+      if (await switchRole(role)) updateUI();
+    }
   } else if (role) {
-    switchRole(role);
+    if (await switchRole(role)) updateUI();
   }
 }
 

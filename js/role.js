@@ -5,17 +5,53 @@
 const REFRESH_INTERVAL = 30000; // 30 seconds
 let CURRENT_ROLE = "dataentry";
 
-function switchRole(role) {
+async function switchRole(role) {
+  if (role === "marketing") {
+    const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+    if (!isAdmin) {
+      const password = prompt("Vui lòng nhập mật khẩu quản trị");
+
+      if (password === null) {
+        alert("Bạn đã hủy thao tác.");
+        return false;
+      }
+
+      if (password.trim() === "") {
+        alert("Bạn chưa nhập mật khẩu. Vui lòng thử lại.");
+        return false;
+      }
+
+      if (password !== "ebBf~f5^'7BL(c&7+") {
+        alert("Mật khẩu không chính xác. Truy cập bị từ chối.");
+        return false;
+      }
+
+      localStorage.setItem("isAdmin", "true");
+    }
+  }
+
   CURRENT_ROLE = role;
+
   document
     .querySelectorAll(".role-tab")
     .forEach((t) => t.classList.toggle("active", t.dataset.role === role));
+
   document
     .querySelectorAll("[id^=view-]")
     .forEach((v) => (v.style.display = "none"));
+
   document.getElementById(`view-${role}`).style.display = "";
-  loadRoleData(role);
+
+  await loadRoleData(role);
+
+  return true;
 }
+
+
+// =====================
+// DATA LOADING
+// =====================
 
 async function loadRoleData(role, manually = true) {
   if (role === "dataentry") await loadParticipants(manually);
@@ -44,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadRoleData(CURRENT_ROLE, false);
       }
     } else {
-        console.info("System is busy, skip background refreshing!");
+      console.info("System is busy, skip background refreshing!");
     }
   }, REFRESH_INTERVAL);
 });
