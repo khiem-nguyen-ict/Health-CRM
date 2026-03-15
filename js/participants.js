@@ -34,9 +34,9 @@ async function loadParticipants(manually = true) {
     if (manually) {
       setLoading(btn, false);
     }
-    if(allParticipants.length <= 0) {
-        // fix bug: reset view
-        renderParticipants([]);
+    if (allParticipants.length <= 0) {
+      // fix bug: reset view
+      renderParticipants([]);
     }
     return;
   }

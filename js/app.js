@@ -7,6 +7,7 @@ const CONFIG = {
 };
 
 var SYSTEM_PENDING_REQUESTS = 0;
+const __TEST_MODE = false;
 
 function formatDateTimeVN(isoString) {
   const date = new Date(isoString);

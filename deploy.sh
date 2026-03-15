@@ -55,6 +55,9 @@ find dist -type f -name "*.html" | while read -r file; do
   run_sed "s|(\.css)([\"'])|\1?v=$VERSION\2|g" "$file"
   run_sed "s|(\.js)([\"'])|\1?v=$VERSION\2|g"  "$file"
 
+  # Remove test scripts
+  run_sed "s|<script\s+src=\"\./test/[^>]+\.js\">\s*</script>||g" "$file"
+
 done
 
 echo ""
@@ -69,7 +72,7 @@ lftp -u "$FTP_USER","$FTP_PASS" "$FTP_HOST" <<EOF
 set ftp:passive-mode on
 set ssl:verify-certificate no
 cd $REMOTE_DIR
-glob -a rm -r *
+glob -a mrm -r -x "maintenance.html" *
 bye
 EOF
 
