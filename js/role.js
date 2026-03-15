@@ -6,29 +6,39 @@ const REFRESH_INTERVAL = 30000; // 30 seconds
 let CURRENT_ROLE = "dataentry";
 
 async function switchRole(role) {
-  if (role === "marketing") {
-    const isAdmin = localStorage.getItem("isAdmin") === "true";
+  let authenticate = localStorage.getItem("authenticate");
+  if (!authenticate) {
+    const password = prompt(
+      `Vui lòng nhập mật khẩu cho vai trò "${role}".\n` +
+        `Nếu cần hỗ trợ, vui lòng liên hệ quản trị: admin@adcrew.vn.`,
+    );
 
-    if (!isAdmin) {
-      const password = prompt("Vui lòng nhập mật khẩu quản trị");
-
-      if (password === null) {
-        alert("Bạn đã hủy thao tác.");
-        return false;
-      }
-
-      if (password.trim() === "") {
-        alert("Bạn chưa nhập mật khẩu. Vui lòng thử lại.");
-        return false;
-      }
-
-      if (password !== "ebBf~f5^'7BL(c&7+") {
-        alert("Mật khẩu không chính xác. Truy cập bị từ chối.");
-        return false;
-      }
-
-      localStorage.setItem("isAdmin", "true");
+    if (password === null) {
+      alert("Bạn đã hủy thao tác.");
+      return false;
     }
+
+    if (password.trim() === "") {
+      alert("Bạn chưa nhập mật khẩu. Vui lòng thử lại.");
+      return false;
+    }
+
+    if (password === "ebBf~f5^'7BL(c&7+") {
+      authenticate = "admin";
+    } else if (password === "OBIMIN") {
+      authenticate = "user";
+    } else {
+      alert("Mật khẩu không chính xác. Truy cập bị từ chối.");
+      return false;
+    }
+    localStorage.setItem("authenticate", authenticate);
+  }
+
+  if (role === "marketing" && authenticate === "user") {
+    alert(
+      "Bạn không đủ thẩm quyền truy cập chức năng này. Vui lòng chọn mục khác.",
+    );
+    return false;
   }
 
   CURRENT_ROLE = role;
@@ -47,7 +57,6 @@ async function switchRole(role) {
 
   return true;
 }
-
 
 // =====================
 // DATA LOADING

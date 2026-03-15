@@ -90,7 +90,7 @@ async function addParticipant() {
     return;
   }
   if (phone.length < 10) {
-    toast("Số điện thoại không hợp lệ", "error");
+    toast("Số Zalo không hợp lệ", "error");
     return;
   }
 

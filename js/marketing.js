@@ -100,7 +100,7 @@ async function exportExcel() {
   const headers = [
     "ID",
     "Họ tên",
-    "Số điện thoại",
+    "Số Zalo",
     "Năm sinh",
     "Giới tính",
     "Chẩn đoán",

@@ -34,10 +34,10 @@ async function addParticipant() {
     hasError = true;
   }
   if (!phone) {
-    showError("err-phone", "Vui lòng nhập số điện thoại");
+    showError("err-phone", "Vui lòng nhập số Zalo");
     hasError = true;
   } else if (phone.length < 10) {
-    showError("err-phone", "Số điện thoại không hợp lệ");
+    showError("err-phone", "Số Zalo không hợp lệ");
     hasError = true;
   }
   if (!consent) {

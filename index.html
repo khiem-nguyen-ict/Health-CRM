@@ -633,7 +633,7 @@
             <!-- Nút đóng — góc trên phải, frosted glass -->
             <button class="webcam-close" onclick="closeWebcam()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
-                     stroke-linecap="round">
+                    stroke-linecap="round">
                     <line x1="18" y1="6" x2="6" y2="18" />
                     <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
@@ -642,7 +642,8 @@
             <!-- Nút chuyển đổi camera — giữa trên -->
             <button class="webcam-switch" onclick="switchWebcamFacing()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                    <path d="M12 4v2M12 18v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M16.07 4.93l-1.41-1.41"/>
+                    <path
+                        d="M12 4v2M12 18v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M16.07 4.93l-1.41-1.41" />
                 </svg>
             </button>
 
@@ -691,7 +692,7 @@
             <div id="view-dataentry">
                 <div class="section-header flex-between">
                     <div>
-                        <h2>Thu Thập Thông Tin</h2>
+                        <h2>Ghi Nhận Thông Tin</h2>
                         <p>Nhập thông tin người tham gia & xác nhận đồng ý</p>
                     </div>
                     <button class="btn btn-primary" onclick="loadParticipants()">🔄 Tải lại</button>
@@ -723,7 +724,7 @@
                                     </select>
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">Số điện thoại *</label>
+                                    <label class="form-label">Số Zalo *</label>
                                     <input class="form-input" id="f-phone" placeholder="0901234567" maxlength="15"
                                         type="tel" autocomplete="tel" />
                                 </div>
@@ -919,7 +920,7 @@
                                         max="150" required />
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">BMI (tự tính)</label>
+                                    <label class="form-label">BMI (hệ thống tự tính)</label>
                                     <input class="form-input" id="h-bmi" placeholder="---" readonly
                                         style="cursor:default;opacity:.7" />
                                 </div>
@@ -929,23 +930,27 @@
                                 </div>
                             </div>
                             <div class="form-field">
-                                <label class="form-label">Vùng đau / triệu chứng</label>
+                                <label class="form-label">Bạn đang có triệu chứng nào</label>
                                 <select class="form-select" id="h-pain">
-                                    <option value="">Chọn vùng...</option>
-                                    <option>Đau lưng</option>
-                                    <option>Đau khớp gối</option>
-                                    <option>Đau vai gáy</option>
-                                    <option>Đau khớp háng</option>
-                                    <option>Đau cổ tay / ngón tay</option>
-                                    <option>Đau cột sống cổ</option>
-                                    <option>Không đau</option>
-                                    <option>Khác</option>
+                                    <option value="">Chọn triệu chứng...</option>
+                                    <option value="dau_lung">Đau lưng / đau mỏi cột sống</option>
+                                    <option value="moi_co">Mỏi cơ</option>
+                                    <option value="moi_vai_co">Mỏi vai / cổ</option>
+                                    <option value="thap_vo_dang">Thấp đi / thay đổi vóc dáng</option>
+                                    <option value="te_moi_tay_chan">Tê mỏi tay chân</option>
+                                    <option value="chuot_rut">Chuột rút</option>
+                                    <option value="kho_ngu">Khó ngủ</option>
+                                    <option value="rung_toc">Rụng tóc</option>
+                                    <option value="mong_tay_gay">Móng tay dễ gãy</option>
+                                    <option value="met_moi">Hay mệt mỏi / dễ ốm</option>
+                                    <option value="khac">Khác</option>
                                 </select>
+
                             </div>
                             <div class="form-field">
-                                <label class="form-label">Ghi chú sức khỏe</label>
+                                <label class="form-label">Vấn đề sức khoẻ gặp phải và mong muốn cải thiện</label>
                                 <textarea class="form-textarea" id="h-notes"
-                                    placeholder="Mô tả triệu chứng, lịch sử bệnh..."></textarea>
+                                    placeholder="Vấn đề sức khỏe (Huyết áp, tiểu đường, xương khớp...) & Mong muốn cải thiện / tư vấn gì... (không bắt buộc)"></textarea>
                             </div>
                             <div class="flex-end">
                                 <button class="btn btn-ghost" onclick="cancelHealth()">Huỷ</button>
@@ -1016,24 +1021,16 @@
                                 <label class="form-label">Tên chuyên gia</label>
                                 <input class="form-input" id="d-doctor-name" placeholder="BS. Nguyễn Văn X" />
                             </div>
-                            <div class="form-field">
+                            <div class="form-field" style="display: none;">
                                 <label class="form-label">Chẩn đoán</label>
                                 <select class="form-select" id="d-diagnosis">
                                     <option value="">Chọn chẩn đoán...</option>
-                                    <option>Thoái hóa khớp</option>
-                                    <option>Thoát vị đĩa đệm</option>
-                                    <option>Viêm khớp dạng thấp</option>
-                                    <option>Loãng xương</option>
-                                    <option>Đau cơ xơ hóa</option>
-                                    <option>Sức khỏe bình thường</option>
-                                    <option>Cần theo dõi thêm</option>
-                                    <option>Khác</option>
                                 </select>
                             </div>
                             <div class="form-field">
-                                <label class="form-label">Nội dung tư vấn</label>
+                                <label class="form-label">Dược sĩ ghi nhận thông tin 4 câu hỏi</label>
                                 <textarea class="form-textarea" id="d-advice"
-                                    placeholder="Ghi chép nội dung tư vấn sức khỏe, khuyến nghị điều trị..."></textarea>
+                                    placeholder="Dược sĩ hỏi khách 4 câu hỏi được BTC cung cấp và ghi nhận thông tin..."></textarea>
                             </div>
                             <div class="form-field">
                                 <label class="form-label">Sản phẩm đề xuất</label>
