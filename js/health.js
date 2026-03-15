@@ -327,7 +327,7 @@ async function setPhotoPreview(src, slot = "front") {
   const area = document.getElementById(areaId);
   area.style.border = "2px solid var(--primary, #4caf50)";
   area.innerHTML = `
-    <img src="${src}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;display:block;" />
+    <img src="${src}" />
     <div class="photo-overlay-hover" style="
       position:absolute;inset:0;
       background:rgba(0,0,0,.4);

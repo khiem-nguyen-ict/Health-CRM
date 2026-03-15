@@ -89,8 +89,34 @@ function renderPostureReport(
     ].join("");
   }
 
-  function photoBox(src, label) {
+  function photoBox(src, label, lines) {
     if (!src) return "";
+    var linesHtml = "";
+    if (lines && lines.length) {
+      var svgLines = lines
+        .map(function (line) {
+          var angleRad = (line.angle || 0) * (Math.PI / 180);
+          var cosA = Math.cos(angleRad);
+          var sinA = Math.sin(angleRad);
+          var length = 150;
+          var x2 = length * cosA;
+          var y2 = length * sinA;
+          return (
+            '<line x1="0" y1="0" x2="' +
+            x2 +
+            '" y2="' +
+            y2 +
+            '" stroke="' +
+            line.color +
+            '" stroke-width="2" />'
+          );
+        })
+        .join("");
+      linesHtml =
+        '<svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;" viewBox="-150 -150 300 300">' +
+        svgLines +
+        "</svg>";
+    }
     return [
       '<div style="flex:1;min-width:0;text-align:center;">',
       '  <div style="',
@@ -98,14 +124,15 @@ function renderPostureReport(
       "    border-radius:4px;",
       "    overflow:hidden;",
       "    background:#f7f9fc;",
+      "    position:relative;",
       '  ">',
-      '    <img src="' + src + '" style="',
-      "      width:100%;",
-      "      display:block;",
-      "      object-fit:contain;",
-      "      max-height:260px;",
-      "      height:auto;",
-      '    " />',
+      '<img src="' + src + '" style="',
+      "width:100%;",
+      "height:260px;",
+      "display:block;",
+      "object-fit:contain;",
+      '" />',
+      linesHtml,
       "  </div>",
       '  <div style="',
       "    text-align:center;",
@@ -120,36 +147,63 @@ function renderPostureReport(
     ].join("");
   }
 
-  function sectionHeader(code, title) {
-    return [
-      '<div style="',
-      "  display:flex;",
-      "  align-items:center;",
-      "  gap:10px;",
-      "  margin-bottom:0;",
-      "  padding:8px 0;",
-      "  border-bottom:2px solid #1a3a6b;",
-      '">',
-      '  <span style="',
-      "    font-size:10px;",
-      "    font-weight:800;",
-      "    color:#fff;",
-      "    background:#1a3a6b;",
-      "    padding:3px 8px;",
-      "    border-radius:3px;",
-      "    letter-spacing:.6px;",
-      "    font-family:'Courier New',monospace;",
-      '  ">' + code + "</span>",
-      '  <span style="',
-      "    font-size:11px;",
-      "    font-weight:700;",
-      "    color:#1a3a6b;",
-      "    letter-spacing:.8px;",
-      "    text-transform:uppercase;",
-      '  ">' + title + "</span>",
-      "</div>",
-    ].join("");
-  }
+   function sectionHeader(code, title) {
+     return [
+       '<div style="',
+       "  display:flex;",
+       "  align-items:center;",
+       "  gap:10px;",
+       "  margin-bottom:0;",
+       "  padding:8px 0;",
+       "  border-bottom:2px solid #1a3a6b;",
+       '">',
+       '  <span style="',
+       "    font-size:10px;",
+       "    font-weight:800;",
+       "    color:#fff;",
+       "    background:#1a3a6b;",
+       "    padding:3px 8px;",
+       "    border-radius:3px;",
+       "    letter-spacing:.6px;",
+       "    font-family:'Courier New',monospace;",
+       '  ">' + code + "</span>",
+       '  <span style="',
+       "    font-size:11px;",
+       "    font-weight:700;",
+       "    color:#1a3a6b;",
+       "    letter-spacing:.8px;",
+       "    text-transform:uppercase;",
+       '  ">' + title + "</span>",
+       "</div>",
+     ].join("");
+   }
+
+   function getFrontLines(frontResult) {
+     if (!frontResult || !frontResult.detected) return [];
+     var lines = [];
+     // Reference axis (vertical) in red
+     lines.push({ angle: 0, color: "red" });
+     // Deviation angle from the first available metric (we'll use A1 if exists, else A2, etc.)
+     var angle = 0;
+     if (frontResult.A1) angle = frontResult.A1.value;
+     else if (frontResult.A2) angle = frontResult.A2.value;
+     else if (frontResult.A3) angle = frontResult.A3.value;
+     else if (frontResult.A4) angle = frontResult.A4.value;
+     else if (frontResult.A5) angle = frontResult.A5.value;
+     else if (frontResult.A6) angle = frontResult.A6.value;
+     lines.push({ angle: angle, color: "blue" });
+     return lines;
+   }
+
+   function getSideLines(sideResult) {
+     if (!sideResult || !sideResult.detected) return [];
+     var lines = [];
+     lines.push({ angle: 0, color: "red" });
+     var angle = 0;
+     if (sideResult.B1) angle = sideResult.B1.value;
+     lines.push({ angle: angle, color: "blue" });
+     return lines;
+   }
 
   // ── Overall score ──────────────────────────────────────────────────────────
   var allStatuses = [];
@@ -161,11 +215,6 @@ function renderPostureReport(
   if (sideResult && sideResult.detected && sideResult.B1) {
     allStatuses.push(sideResult.B1.status);
   }
-
-  //   var scoreMap = { normal: 0, mild: 1, moderate: 2, severe: 3 };
-  //   var worst = allStatuses.reduce(function (w, s) {
-  //     return (scoreMap[s] || 0) > (scoreMap[w] || 0) ? s : w;
-  //   }, "normal");
 
   var scoreMap = { normal: 0, mild: 1, moderate: 2, severe: 3 };
 
@@ -187,7 +236,52 @@ function renderPostureReport(
 
   var overallColor = statusColor[overall];
 
-  //var overallColor = statusColor[worst];
+  // ── Nội dung tư vấn theo kết quả tổng thể ──────────────────────────────
+  var s =
+    paticipant.gender === "Nữ"
+      ? "Chị"
+      : paticipant.gender === "Nam"
+        ? "Anh"
+        : "Anh/chị";
+  if (overall === "normal") {
+    clinicalAdvice =
+      "<b>Khung vai</b> và <b>trục cột sống</b> của " +
+      s.toLowerCase() +
+      " hiện <b>khá cân bằng</b>, đây là dấu hiệu cho thấy <b>tư thế cơ thể</b> đang ở trạng thái tốt.<br><br>" +
+      "Tuy nhiên, với <b>phụ nữ sau 30 tuổi</b>, việc duy trì <b>mật độ xương khỏe mạnh</b> vẫn rất quan trọng.<br><br>" +
+      s +
+      " nên chú ý <b>bổ sung canxi đầy đủ</b> và duy trì <b>vận động nhẹ nhàng</b> để giữ sự ổn định của <b>hệ cơ xương khớp</b> lâu dài.<br><br>" +
+      "Nhiều " +
+      s.toLowerCase() +
+      " em cùng độ tuổi đôi khi vẫn gặp tình trạng <b>mỏi vai</b> hoặc <b>chuột rút nhẹ</b>, " +
+      s.toLowerCase() +
+      " có thường gặp những dấu hiệu này trong <b>sinh hoạt hằng ngày</b> không?";
+  } else if (overall === "mild") {
+    clinicalAdvice =
+      "Phân tích cho thấy <b>tư thế vai</b> và <b>cột sống</b> của " +
+      s.toLowerCase() +
+      " đang có <b>dấu hiệu lệch nhẹ</b>.<br><br>" +
+      "Tình trạng này khá phổ biến ở những người <b>làm việc nhiều với máy tính</b>, <b>ít vận động</b> hoặc thường xuyên giữ <b>một tư thế trong thời gian dài</b>.<br><br>" +
+      "Nếu kéo dài, sự lệch nhẹ này có thể khiến vùng <b>vai - cổ - lưng</b> dễ bị <b>mỏi</b> hoặc <b>căng cơ</b>.<br><br>" +
+      s +
+      " nên chú ý <b>điều chỉnh tư thế làm việc</b>, kết hợp <b>vận động giãn cơ</b> và <b>bổ sung dưỡng chất hỗ trợ xương khớp</b>, đặc biệt là <b>canxi</b>.<br><br>" +
+      "Nhiều " +
+      s.toLowerCase() +
+      " em trên 30 tuổi thường gặp tình trạng <b>mỏi vai</b>, <b>đau lưng</b> hoặc <b>chuột rút nhẹ</b>; " +
+      s.toLowerCase() +
+      " có cảm thấy những <b>triệu chứng này ảnh hưởng đến sinh hoạt</b> của mình không?";
+  } else if (overall === "moderate" || overall === "severe") {
+    clinicalAdvice =
+      "Kết quả cho thấy <b>trục cột sống</b> và <b>vai</b> của " +
+      s.toLowerCase() +
+      " đang có <b>dấu hiệu lệch tư thế rõ hơn</b> so với trạng thái cân bằng.<br><br>" +
+      "Nếu tình trạng này kéo dài, các <b>nhóm cơ vùng cổ, vai và lưng</b> có thể phải <b>hoạt động bù trừ nhiều hơn</b>, dễ dẫn đến <b>mỏi vai</b>, <b>đau lưng</b> hoặc <b>giảm sự linh hoạt khi vận động</b>.<br><br>" +
+      s +
+      " nên chú ý hơn đến việc <b>chăm sóc sức khỏe hệ xương khớp</b>, đặc biệt là <b>bổ sung canxi đầy đủ</b> và thực hiện <b>các bài tập giãn cơ cột sống nhẹ nhàng mỗi ngày</b>.<br><br>" +
+      "Nhiều người sau 30 tuổi cũng gặp các biểu hiện như <b>mỏi vai</b>, <b>đau lưng</b> hoặc <b>chuột rút ban đêm</b>; " +
+      s.toLowerCase() +
+      " có thường gặp những <b>triệu chứng này</b> trong thời gian gần đây không?";
+  }
 
   var now = new Date();
   var dateStr =
@@ -333,19 +427,19 @@ function renderPostureReport(
     // ══ NỘI DUNG CHÍNH ══════════════════════════════════════════════════════
     '<div style="padding:24px 32px;">',
 
-    // ── Ảnh chụp ──────────────────────────────────────────────────────────
-    photoFront || photoSide
-      ? [
-          '<div style="margin-bottom:22px;">',
-          sectionHeader("IMG", "Ảnh Chụp Kiểm Tra"),
-          '<div style="display:flex;gap:16px;margin-top:14px;">',
-          photoBox(photoFront, "Mặt Trước"),
-          photoBox(photoSide, "Hình Nhìn Nghiêng"),
-          "</div>",
-          "</div>",
-          '<div style="border-top:1px dashed #dce3ed;margin-bottom:22px;"></div>',
-        ].join("")
-      : "",
+     // ── Ảnh chụp ──────────────────────────────────────────────────────────
+     photoFront || photoSide
+       ? [
+           '<div style="margin-bottom:22px;">',
+           sectionHeader("IMG", "Ảnh Chụp Kiểm Tra"),
+           '<div style="display:flex;gap:16px;margin-top:14px;">',
+           photoBox(photoFront, "Mặt Trước", getFrontLines(frontResult)),
+           photoBox(photoSide, "Hình Nhìn Nghiêng", getSideLines(sideResult)),
+           "</div>",
+           "</div>",
+           '<div style="border-top:1px dashed #dce3ed;margin-bottom:22px;"></div>',
+         ].join("")
+       : "",
 
     // ── Phần A: Mặt trước ─────────────────────────────────────────────────
     frontResult && frontResult.detected
@@ -527,6 +621,19 @@ function renderPostureReport(
                 "</div>",
               ].join("")
             : "",
+          '<div style="',
+          "margin-top:10px;",
+          "padding:10px 12px;",
+          "background:#ffffff;",
+          "border:1px dashed #dce3ed;",
+          "border-radius:3px;",
+          "font-family:'Arial',sans-serif;",
+          "font-size:12.5px;",
+          "line-height:1.6;",
+          "color:#1a2535;",
+          '">',
+          clinicalAdvice,
+          "</div>",
 
           "</div>",
           "</div>",
