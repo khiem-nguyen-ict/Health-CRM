@@ -302,7 +302,7 @@ function renderPostureReport(
     "position:relative;z-index:1;",
     '">',
     [
-      { label: "Mã báo cáo", value: reportId },
+      { label: "Mã bệnh nhân", value: reportId },
       { label: "Ngày thực hiện", value: dateStr },
       { label: "Giờ", value: timeStr },
       {

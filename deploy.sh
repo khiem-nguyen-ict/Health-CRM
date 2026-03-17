@@ -16,7 +16,7 @@ LOCAL_DIR="$(pwd)"
 
 # =====================
 # Config - update this manually each release
-APP_VERSION="1.3.11"
+APP_VERSION="1.4.15"
 # =====================
 
 echo "Minifying..."
