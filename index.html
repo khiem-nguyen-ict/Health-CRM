@@ -579,28 +579,28 @@
                     <button class="btn btn-primary role-btn" onclick="loadConfigAndStart('dataentry')">
                         <span class="role-btn__icon">📋</span>
                         <div class="role-btn__label">
-                            <div class="role-btn__title">1. Nhập Liệu</div>
+                            <div class="role-btn__title">Nhập Liệu</div>
                         </div>
                     </button>
 
                     <button class="btn btn-green role-btn" onclick="loadConfigAndStart('health')">
                         <span class="role-btn__icon">💊</span>
                         <div class="role-btn__label">
-                            <div class="role-btn__title">2. Đo Sức Khoẻ</div>
+                            <div class="role-btn__title">Đo Sức Khoẻ</div>
                         </div>
                     </button>
 
                     <button class="btn btn-amber role-btn" onclick="loadConfigAndStart('doctor')">
                         <span class="role-btn__icon">🩺</span>
                         <div class="role-btn__label">
-                            <div class="role-btn__title">3. Chuyên Gia</div>
+                            <div class="role-btn__title">Chuyên Gia</div>
                         </div>
                     </button>
 
                     <button class="btn btn-purple role-btn" onclick="loadConfigAndStart('marketing')">
                         <span class="role-btn__icon">📊</span>
                         <div class="role-btn__label">
-                            <div class="role-btn__title">4. Quản Trị</div>
+                            <div class="role-btn__title">Quản Trị</div>
                         </div>
                     </button>
                 </div>
@@ -841,10 +841,7 @@
                                         style="font-size:.78rem; font-weight:600; color:var(--muted); text-align:center; letter-spacing:.03em;">
                                         MẶT TRƯỚC
                                     </div>
-                                    <div class="photo-area" id="photo-area-front" style="height: 320px; cursor: pointer; position: relative; overflow: hidden; border-radius: 10px; 
-                   background: var(--surface) url('./images/front-placeholder.jpg') center/cover no-repeat; 
-                   border: 2px dashed var(--border); display: flex; flex-direction: column; 
-                   align-items: center; justify-content: center; gap: 4px; transition: border-color 0.2s;"
+                                    <div class="photo-area" id="photo-area-front" style="background: var(--surface) url('./images/front-placeholder.jpg') center/cover no-repeat; "
                                         onclick="openWebcam('front')">
                                         <div style="font-size:1.8rem">📷</div>
                                         <div style="font-size:.75rem;color:var(--muted);text-align:center;">Nhấn để
@@ -865,10 +862,7 @@
                                         style="font-size:.78rem; font-weight:600; color:var(--muted); text-align:center; letter-spacing:.03em;">
                                         MẶT NGHIÊNG
                                     </div>
-                                    <div class="photo-area" id="photo-area-side" style="height: 320px; cursor: pointer; position: relative; overflow: hidden; border-radius: 10px; 
-                   background: var(--surface) url('./images/side-placeholder.jpg') center/cover no-repeat; 
-                   border: 2px dashed var(--border); display: flex; flex-direction: column; 
-                   align-items: center; justify-content: center; gap: 4px; transition: border-color 0.2s;"
+                                    <div class="photo-area" id="photo-area-side" style="background: var(--surface) url('./images/side-placeholder.jpg') center/cover no-repeat; "
                                         onclick="openWebcam('side')">
                                         <div style="font-size:1.8rem">📷</div>
                                         <div style="font-size:.75rem;color:var(--muted);text-align:center;">Nhấn để
@@ -971,17 +965,17 @@
                                 <label class="form-label">Bạn đang có triệu chứng nào</label>
                                 <select class="form-select" id="h-pain">
                                     <option value="">Chọn triệu chứng...</option>
-                                    <option value="dau_lung">Đau lưng / đau mỏi cột sống</option>
-                                    <option value="moi_co">Mỏi cơ</option>
-                                    <option value="moi_vai_co">Mỏi vai / cổ</option>
-                                    <option value="thap_vo_dang">Thấp đi / thay đổi vóc dáng</option>
-                                    <option value="te_moi_tay_chan">Tê mỏi tay chân</option>
-                                    <option value="chuot_rut">Chuột rút</option>
-                                    <option value="kho_ngu">Khó ngủ</option>
-                                    <option value="rung_toc">Rụng tóc</option>
-                                    <option value="mong_tay_gay">Móng tay dễ gãy</option>
-                                    <option value="met_moi">Hay mệt mỏi / dễ ốm</option>
-                                    <option value="khac">Khác</option>
+                                    <option value="Đau lưng / đau mỏi cột sống">Đau lưng / đau mỏi cột sống</option>
+                                    <option value="Mỏi cơ">Mỏi cơ</option>
+                                    <option value="Mỏi vai / cổ">Mỏi vai / cổ</option>
+                                    <option value="Thấp đi / thay đổi vóc dáng">Thấp đi / thay đổi vóc dáng</option>
+                                    <option value="Tê mỏi tay chân">Tê mỏi tay chân</option>
+                                    <option value="Chuột rút">Chuột rút</option>
+                                    <option value="Khó ngủ">Khó ngủ</option>
+                                    <option value="Rụng tóc">Rụng tóc</option>
+                                    <option value="Móng tay dễ gãy">Móng tay dễ gãy</option>
+                                    <option value="Hay mệt mỏi / dễ ốm">Hay mệt mỏi / dễ ốm</option>
+                                    <option value="Khác">Khác</option>
                                 </select>
 
                             </div>

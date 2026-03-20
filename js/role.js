@@ -10,7 +10,8 @@ async function switchRole(role) {
   if (!authenticate) {
     const password = prompt(
       `Vui lòng nhập mật khẩu cho vai trò "${role}".\n` +
-        `Nếu cần hỗ trợ, vui lòng liên hệ quản trị: admin@adcrew.vn.`,
+        `Nếu cần hỗ trợ, vui lòng liên hệ quản trị: admin@adcrew.vn.\n` +
+        `💡 Gợi ý: Mật khẩu gồm 1 từ viết hoa — chính là tên nhãn hàng bạn sẽ thực hiện hôm nay! 🔑`,
     );
 
     if (password === null) {

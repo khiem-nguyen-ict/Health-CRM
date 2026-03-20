@@ -34,12 +34,12 @@ function reanderDoctorQueueRows(rows) {
     .map((r) => {
       const hd = allDoctorQueueHealthRows.find((h) => h.participantId === r.id);
       return `<tr>
-      <td class="td-name">${r.name}</td>
-      <td class="td-phone">${r.phone}</td>
-      <td>${hd ? hd.pain || "N/A" : "Chưa có"}</td>
-      <td>${statusBadge(r.status)}</td>
-      <td class="td-phone">${formatDateTimeVN(r.createdAt)}</td>
-      <td><button class="btn btn-amber btn-sm" onclick="selectParticipantDoctor('${r.id}')">🩺 Tư vấn</button></td>
+      <td class="td-name" data-label="Họ tên">${r.name}</td>
+      <td class="td-phone" data-label="SĐT">${r.phone}</td>
+      <td data-label="Triệu chứng">${hd ? hd.pain || "N/A" : "Chưa có"}</td>
+      <td data-label="Trạng thái">${statusBadge(r.status)}</td>
+      <td class="td-phone" data-label="Thời điểm">${formatDateTimeVN(r.createdAt)}</td>
+      <td data-label="Thao tác"><button class="btn btn-amber btn-sm" onclick="selectParticipantDoctor('${r.id}')">🩺 Tư vấn</button></td>
     </tr>`;
     })
     .join("");

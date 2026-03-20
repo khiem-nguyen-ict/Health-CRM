@@ -8,6 +8,50 @@ function renderPostureReport(
 ) {
   var el = document.getElementById(containerId);
   if (!el) return;
+
+  // ── INJECT RESPONSIVE STYLES ONCE ──────────────────────────────────────────
+  if (!document.getElementById("adcrew-report-styles")) {
+    var styleEl = document.createElement("style");
+    styleEl.id = "adcrew-report-styles";
+    styleEl.textContent = [
+      "@media(max-width:600px){",
+      // outer card
+      ".adcrew-report{border-radius:0!important;box-shadow:none!important;max-width:100%!important;}",
+      // header
+      ".adcrew-header{padding:16px 16px 14px!important;}",
+      ".adcrew-header-title{font-size:16px!important;}",
+      // stats: 4-col → 2×2 grid
+      ".adcrew-stats{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px 0!important;}",
+      ".adcrew-stat-item{flex:none!important;padding:0 10px 0 0!important;border-left:none!important;}",
+      ".adcrew-stat-item:nth-child(even){padding-left:10px!important;border-left:1px solid rgba(255,255,255,.12)!important;}",
+      ".adcrew-stat-item:nth-child(n+3){padding-top:8px!important;border-top:1px solid rgba(255,255,255,.12)!important;}",
+      // body padding
+      ".adcrew-body{padding:16px 14px!important;}",
+      // photos: side-by-side → stacked
+      ".adcrew-photos{flex-direction:column!important;}",
+      ".adcrew-photo-item{flex:none!important;width:100%!important;min-width:0!important;}",
+      // tables: hide header, each row → card
+      ".adcrew-table thead{display:none!important;}",
+      ".adcrew-table tbody tr{display:block!important;border:1px solid #e2e8f0!important;border-radius:6px!important;margin-bottom:10px!important;padding:10px 12px!important;background:#fff!important;box-shadow:0 1px 4px rgba(0,0,0,.06)!important;}",
+      ".adcrew-table tbody tr:last-child{margin-bottom:0!important;}",
+      ".adcrew-table td{display:none!important;padding:0!important;border-top: none !important;}",
+      // footer
+      ".adcrew-footer{flex-direction:column!important;gap:8px!important;padding:12px 14px!important;align-items:flex-start!important;}",
+      ".adcrew-footer-id{text-align:left!important;}",
+      // rx rows
+      ".adcrew-rx-row{flex-direction:column!important;gap:4px!important;}",
+      ".adcrew-rx-label{width:auto!important;}",
+      "}",
+      "@media(min-width:601px) and (max-width:820px){",
+      ".adcrew-header{padding:18px 22px 14px!important;}",
+      ".adcrew-body{padding:18px 22px!important;}",
+      ".adcrew-footer{padding:10px 22px!important;}",
+      "}",
+    ].join("");
+    document.head.appendChild(styleEl);
+  }
+  // ───────────────────────────────────────────────────────────────────────────
+
   var statusColor = {
     normal: {
       bg: "#e8f5e9",
@@ -47,13 +91,16 @@ function renderPostureReport(
     var borderStyle = isLast ? "none" : "1px solid #eaeef3";
     return [
       '<tr style="border-bottom:' + borderStyle + ';">',
-      "<td style=\"padding:9px 12px 9px 0;font-size:10px;color:#8a9ab0;font-family:'Courier New',monospace;font-weight:700;white-space:nowrap;width:28px;\">" +
+      // class="tc" — code column
+      '<td class="tc" style="padding:9px 12px 9px 0;font-size:10px;color:#8a9ab0;font-family:\'Courier New\',monospace;font-weight:700;white-space:nowrap;width:28px;">' +
         label +
         "</td>",
-      '<td style="padding:9px 16px 9px 8px;font-size:12.5px;color:#1a2535;font-weight:500;white-space:nowrap;">' +
+      // class="tn" — name column
+      '<td class="tn" style="padding:9px 16px 9px 8px;font-size:12.5px;color:#1a2535;font-weight:500;white-space:nowrap;">' +
         label2 +
         "</td>",
-      '<td style="padding:9px 16px;width:130px;">',
+      // class="tb" — bar column
+      '<td class="tb" style="padding:9px 16px;width:130px;">',
       ' <div style="position:relative;background:#edf1f7;border-radius:2px;height:5px;overflow:hidden;">',
       ' <div style="position:absolute;left:0;top:0;background:' +
         s.dot +
@@ -62,13 +109,15 @@ function renderPostureReport(
         '%;height:100%;border-radius:2px;"></div>',
       " </div>",
       "</td>",
-      '<td style="padding:9px 16px;font-size:12px;font-weight:700;color:' +
+      // class="tv" — value column
+      '<td class="tv" style="padding:9px 16px;font-size:12px;font-weight:700;color:' +
         s.text +
         ";text-align:right;white-space:nowrap;font-family:'Courier New',monospace;width:50px;\">" +
         item.value +
         item.unit +
         "</td>",
-      '<td style="padding:9px 0;text-align:right;white-space:nowrap;">' +
+      // class="tr-res" — result column
+      '<td class="tr-res" style="padding:9px 0;text-align:right;white-space:nowrap;">' +
         badge(item.status) +
         "</td>",
       "</tr>",
@@ -77,22 +126,23 @@ function renderPostureReport(
   function photoBox(src, label) {
     if (!src) return "";
     return [
-      '<div style="flex:1;min-width:0;text-align:center;">',
+      // class="adcrew-photo-item" added — only layout change
+      '<div class="adcrew-photo-item" style="flex:1;min-width:0;text-align:center;">',
 
       ' <div style="',
       " border:1px solid #dce3ed;",
       " border-radius:4px;",
       " overflow:hidden;",
       " background:#f7f9fc;",
-      " height:260px;", // FIX
-      " display:flex;", // FIX
-      " align-items:center;", // FIX
-      " justify-content:center;", // FIX
+      " height:260px;",
+      " display:flex;",
+      " align-items:center;",
+      " justify-content:center;",
       ' ">',
 
       ' <img src="' + src + '" style="',
-      " max-width:100%;", // FIX
-      " max-height:100%;", // FIX
+      " max-width:100%;",
+      " max-height:100%;",
       " object-fit:contain;",
       " display:block;",
       ' " />',
@@ -225,7 +275,8 @@ function renderPostureReport(
     now.getMinutes().toString().padStart(2, "0");
   var reportId = paticipant.id;
   var html = [
-    '<div style="',
+    // class="adcrew-report" added — only layout change
+    '<div class="adcrew-report" style="',
     "font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;",
     "background:#fff;",
     "width:100%;",
@@ -236,7 +287,8 @@ function renderPostureReport(
     "overflow:hidden;",
     "color:#1a2535;",
     '">',
-    '<div style="',
+    // class="adcrew-header" added — only layout change
+    '<div class="adcrew-header" style="',
     "background:linear-gradient(135deg,#0d2b5e 0%,#1a3a6b 60%,#1e4d8c 100%);",
     "padding:22px 32px 18px;",
     "position:relative;",
@@ -265,7 +317,8 @@ function renderPostureReport(
     " font-family:'Arial',sans-serif;",
     " margin-bottom:4px;",
     ' ">Dữ liệu được chuẩn đoán bởi ADCREW AI</div>',
-    ' <div style="',
+    // class="adcrew-header-title" added — only layout change
+    ' <div class="adcrew-header-title" style="',
     " font-size:22px;",
     " font-weight:700;",
     " color:#ffffff;",
@@ -293,7 +346,8 @@ function renderPostureReport(
     " </svg>",
     " </div>",
     "</div>",
-    '<div style="',
+    // class="adcrew-stats" added — only layout change
+    '<div class="adcrew-stats" style="',
     "display:flex;gap:0;",
     "margin-top:16px;",
     "border-top:1px solid rgba(255,255,255,.12);",
@@ -321,7 +375,8 @@ function renderPostureReport(
             ";letter-spacing:.5px;"
           : "font-size:12px;font-weight:700;color:#fff;";
         return [
-          '<div style="flex:1;padding:0 16px 0 ' +
+          // class="adcrew-stat-item" added — only layout change
+          '<div class="adcrew-stat-item" style="flex:1;padding:0 16px 0 ' +
             (i === 0 ? "0" : "16px") +
             ";" +
             borderLeft +
@@ -335,12 +390,14 @@ function renderPostureReport(
       })
       .join(""),
     "</div></div>",
-    '<div style="padding:24px 32px;">',
+    // class="adcrew-body" added — only layout change
+    '<div class="adcrew-body" style="padding:24px 32px;">',
     photoFront || photoSide
       ? [
           '<div style="margin-bottom:22px;">',
           sectionHeader("IMG", "Ảnh Chụp Kiểm Tra"),
-          '<div style="display:flex;gap:16px;margin-top:14px;">',
+          // class="adcrew-photos" added — only layout change
+          '<div class="adcrew-photos" style="display:flex;gap:16px;margin-top:14px;">',
           photoBox(photoFront, "Mặt Trước"),
           photoBox(photoSide, "Hình Nhìn Nghiêng"),
           "</div>",
@@ -370,7 +427,8 @@ function renderPostureReport(
                 "</div>",
               ].join("")
             : "",
-          '<table style="width:100%;border-collapse:collapse;margin-top:8px;">',
+          // class="adcrew-table" added — only layout change
+          '<table class="adcrew-table" style="width:100%;border-collapse:collapse;margin-top:8px;">',
           "<thead>",
           '<tr style="background:#f7f9fc;border-bottom:2px solid #dce3ed;">',
           " <th style=\"padding:7px 12px 7px 0;font-size:9.5px;color:#8a9ab0;font-weight:700;text-align:left;letter-spacing:.8px;text-transform:uppercase;font-family:'Arial',sans-serif;width:28px;\">Mã</th>",
@@ -414,7 +472,8 @@ function renderPostureReport(
       ? [
           '<div style="margin-bottom:22px;">',
           sectionHeader("B", "Phân Tích Hình Nhìn Nghiêng"),
-          '<table style="width:100%;border-collapse:collapse;margin-top:8px;">',
+          // class="adcrew-table" added — only layout change
+          '<table class="adcrew-table" style="width:100%;border-collapse:collapse;margin-top:8px;">',
           "<thead>",
           '<tr style="background:#f7f9fc;border-bottom:2px solid #dce3ed;">',
           " <th style=\"padding:7px 12px 7px 0;font-size:9.5px;color:#8a9ab0;font-weight:700;text-align:left;letter-spacing:.8px;text-transform:uppercase;font-family:'Arial',sans-serif;width:28px;\">Mã</th>",
@@ -476,13 +535,15 @@ function renderPostureReport(
           '<div style="padding:14px 16px;">',
           frontResult && frontResult.detected
             ? [
-                '<div style="',
+                // class="adcrew-rx-row" added — only layout change
+                '<div class="adcrew-rx-row" style="',
                 "display:flex;gap:10px;",
                 "padding:8px 0;",
                 "border-bottom:1px solid #eaeef3;",
                 "font-family:'Arial',sans-serif;",
                 '">',
-                ' <span style="',
+                // class="adcrew-rx-label" added — only layout change
+                ' <span class="adcrew-rx-label" style="',
                 " font-size:10px;font-weight:700;color:#8a9ab0;",
                 " letter-spacing:.6px;text-transform:uppercase;",
                 " width:60px;flex-shrink:0;padding-top:1px;",
@@ -495,12 +556,14 @@ function renderPostureReport(
             : "",
           sideResult && sideResult.detected
             ? [
-                '<div style="',
+                // class="adcrew-rx-row" added — only layout change
+                '<div class="adcrew-rx-row" style="',
                 "display:flex;gap:10px;",
                 "padding:8px 0 0;",
                 "font-family:'Arial',sans-serif;",
                 '">',
-                ' <span style="',
+                // class="adcrew-rx-label" added — only layout change
+                ' <span class="adcrew-rx-label" style="',
                 " font-size:10px;font-weight:700;color:#8a9ab0;",
                 " letter-spacing:.6px;text-transform:uppercase;",
                 " width:60px;flex-shrink:0;padding-top:1px;",
@@ -559,7 +622,8 @@ function renderPostureReport(
       .join('<span style="color:#dce3ed;margin:0 2px;">|</span>'),
     "</div>",
     "</div>",
-    '<div style="',
+    // class="adcrew-footer" added — only layout change
+    '<div class="adcrew-footer" style="',
     "background:#f0f4fa;",
     "border-top:1px solid #dce3ed;",
     "padding:10px 32px;",
@@ -575,7 +639,8 @@ function renderPostureReport(
     " hiệu quả tổng thể cao hơn nhiều startup posture AI(~6/10)và có thể hỗ trợ đánh giá tư thế khi kết hợp chuyên môn lâm sàng.",
     " </span>",
     " </div>",
-    " <div style=\"font-size:9.5px;color:#aab4c0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;text-align:right;\">",
+    // class="adcrew-footer-id" added — only layout change
+    " <div class=\"adcrew-footer-id\" style=\"font-size:9.5px;color:#aab4c0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace;text-align:right;\">",
     " " +
       reportId +
       '<br/><span style="color:#c8d0da;">' +
@@ -588,4 +653,41 @@ function renderPostureReport(
     "</div>",
   ].join("");
   el.innerHTML = html;
+
+  // ── MOBILE TABLE CARD RESTRUCTURING ────────────────────────────────────────
+  if (window.innerWidth <= 600) {
+    el.querySelectorAll(".adcrew-table tbody tr").forEach(function (tr) {
+      var cells = tr.querySelectorAll("td");
+      if (cells.length < 5) return;
+      var code = cells[0].textContent.trim();
+      var name = cells[1].textContent.trim();
+      var bar = cells[2].innerHTML;
+      var valColor = cells[3].style.color || "#1a2535";
+      var valText = cells[3].textContent.trim();
+      var badgeHtml = cells[4].innerHTML;
+      tr.innerHTML =
+        '<td style="display:block!important;padding:0;">' +
+        '<div style="margin-bottom:4px;">' +
+        "<span style=\"font-size:9px;color:#8a9ab0;font-family:'Courier New',monospace;font-weight:700;margin-right:6px;\">" +
+        code +
+        "</span>" +
+        '<span style="font-size:13px;font-weight:600;color:#1a2535;">' +
+        name +
+        "</span>" +
+        "</div>" +
+        '<div style="margin-bottom:8px;">' +
+        bar +
+        "</div>" +
+        '<div style="display:flex;align-items:center;justify-content:space-between;">' +
+        '<span style="color:' +
+        valColor +
+        ";font-size:14px;font-weight:700;font-family:'Courier New',monospace;\">" +
+        valText +
+        "</span>" +
+        badgeHtml +
+        "</div>" +
+        "</td>";
+    });
+  }
+  // ───────────────────────────────────────────────────────────────────────────
 }

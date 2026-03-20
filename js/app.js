@@ -2,7 +2,7 @@
 // CONFIG & STATE
 // =====================
 const CONFIG = {
-  url: "https://script.google.com/macros/s/AKfycbyWwIwhr0V3RIHHgaMsIYZ95YyrYqxZEtcDb26HEMIQOatoG8uBI1Riz9z85oAd3mcn/exec",
+  url: "https://script.google.com/macros/s/AKfycbyfbr3Hg2T-l1-23Y2Xx1ajtgE8ORWdIeHgdfrgfOJjeO_0fwsm0TDmlIWore9Argna/exec",
   ssId: "1iY0VJaIvLGDYi2A4TsBXAXu6jgTz-GhXd8p75Gpg4iw",
 };
 

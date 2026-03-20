@@ -58,9 +58,9 @@ function renderParticipants(rows) {
     .map(
       (r) => `
 <tr>
-  <td class="td-name">${r.name || ""}</td>
-  <td>${r.birthYear || ""}</td>
-  <td class="td-phone">${r.phone || ""}</td>
+  <td class="td-name" data-label="Họ tên">${r.name || ""}</td>
+  <td data-label="Năm sinh">${r.birthYear || ""}</td>
+  <td class="td-phone" data-label="SĐT">${r.phone || ""}</td>
 </tr>`,
     )
     .join("");

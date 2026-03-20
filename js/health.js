@@ -27,15 +27,15 @@ function renderHealhQueueRows(rows) {
     tbody.innerHTML = `<tr><td colspan="5">${IconAllDone({ message: "Không có kết quả nào - hàng chờ trống hoặc không khớp với tìm kiếm." })}</td></tr>`;
     return;
   }
-  tbody.innerHTML = rows
+ tbody.innerHTML = rows
     .map(
       (r) => `
     <tr>
-      <td class="td-name">${r.name}</td>
-      <td class="td-phone">${r.phone}</td>
-      <td>${statusBadge(r.status)}</td>
-      <td class="td-phone">${formatDateTimeVN(r.createdAt)}</td>
-      <td><button class="btn btn-green btn-sm" onclick="selectParticipantHealth('${r.id}')">📋 Nhập dữ liệu</button></td>
+      <td class="td-name" data-label="Họ tên">${r.name}</td>
+      <td class="td-phone" data-label="SĐT">${r.phone}</td>
+      <td data-label="Trạng thái">${statusBadge(r.status)}</td>
+      <td class="td-phone" data-label="Thời điểm">${formatDateTimeVN(r.createdAt)}</td>
+      <td data-label="Thao tác"><button class="btn btn-green btn-sm" onclick="selectParticipantHealth('${r.id}')">📋 Nhập dữ liệu</button></td>
     </tr>`,
     )
     .join("");
