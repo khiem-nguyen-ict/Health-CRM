@@ -2,8 +2,8 @@
 // CONFIG & STATE
 // =====================
 const CONFIG = {
-  url: "https://script.google.com/macros/s/AKfycbyfbr3Hg2T-l1-23Y2Xx1ajtgE8ORWdIeHgdfrgfOJjeO_0fwsm0TDmlIWore9Argna/exec",
-  ssId: "1iY0VJaIvLGDYi2A4TsBXAXu6jgTz-GhXd8p75Gpg4iw",
+  CONFIG_URL: "https://script.google.com/macros/s/AKfycbxiSHl_RQ1p2Z7CisbDtVzwoB0Q3hUgON1vkybD5B7ayexlphyfQtCC6FXyDBtvw8NP/exec",
+  CONFIG_SHEET_ID: "1iY0VJaIvLGDYi2A4TsBXAXu6jgTz-GhXd8p75Gpg4iw",
 };
 
 var SYSTEM_PENDING_REQUESTS = 0;
@@ -86,7 +86,7 @@ function scrollToForm(elemId) {
 
 async function apiGet(sheet = "all", filterCol = null, filterVal = null) {
   SYSTEM_PENDING_REQUESTS++;
-  let fetchUrl = `${CONFIG.url}?action=getAll&sheet=${sheet}&ss=${CONFIG.ssId}`;
+  let fetchUrl = `${CONFIG.CONFIG_URL}?action=getAll&sheet=${sheet}&ss=${CONFIG.CONFIG_SHEET_ID}`;
   if (filterCol && filterVal) {
     const params = new URLSearchParams({
       filterCol: filterCol,
@@ -119,7 +119,7 @@ async function apiGet(sheet = "all", filterCol = null, filterVal = null) {
 async function apiPost(action, sheet, payload) {
   SYSTEM_PENDING_REQUESTS++;
   try {
-    const r = await fetch(CONFIG.url, {
+    const r = await fetch(CONFIG.CONFIG_URL, {
       method: "POST",
       redirect: "follow",
       mode: "cors",
@@ -129,7 +129,7 @@ async function apiPost(action, sheet, payload) {
         data: payload.data,
         id: payload.id,
         updates: payload.updates,
-        ee: CONFIG.ssId,
+        ee: CONFIG.CONFIG_SHEET_ID,
       }),
     });
     const text = await r.text();
@@ -148,9 +148,9 @@ async function apiPost(action, sheet, payload) {
 
 async function initSheets() {
   try {
-    await fetch(CONFIG.url, {
+    await fetch(CONFIG.CONFIG_URL, {
       method: "POST",
-      body: JSON.stringify({ action: "init", sheet: "all", ee: CONFIG.ssId }),
+      body: JSON.stringify({ action: "init", sheet: "all", ee: CONFIG.CONFIG_SHEET_ID }),
     });
   } catch (e) {}
 }

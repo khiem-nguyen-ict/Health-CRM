@@ -310,7 +310,7 @@ header {
 }
 
 .logo {
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1.05rem;
   color: var(--text);
   letter-spacing: -0.5px;
@@ -760,7 +760,7 @@ tr:hover td { background: rgba(0, 0, 0, 0.02); }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1.3rem;
   color: #fff;
   flex-shrink: 0;
@@ -864,7 +864,7 @@ tr:hover td { background: rgba(0, 0, 0, 0.02); }
   padding: 18px;
 }
 
-.stat-num  { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+.stat-num  { font-size: 1.8rem; font-weight: 700; line-height: 1; }
 .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
 
 .stat-blue .stat-num   { color: var(--blue); }
@@ -1050,7 +1050,7 @@ tr:hover td { background: rgba(0, 0, 0, 0.02); }
 
 .banner__logo-name {
   font-size: 1.55rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff;
   letter-spacing: -0.5px;
   line-height: 1;

@@ -1,23 +1,28 @@
-#!/bin/bash
 
-# ============================================================
-# upload_to_remote.sh
-# Usage: ./upload_to_remote.sh
-# ============================================================
+# 1. Define the path to your .env file
+ENV_FILE=".env.production"
+
+# 2. Check if the file exists
+if [ ! -f "$ENV_FILE" ]; then
+    echo "❌ Error: Environment file $ENV_FILE not found!"
+    exit 1
+fi
+
+# 3. Load, strip comments, and remove hidden \r (Carriage Returns)
+export $(grep -v '^#' "$ENV_FILE" | sed 's/\r$//' | xargs)
+
+# 4. Optional: Verify variables are loaded
+if [ -z "$FTP_PASS" ]; then
+    echo "❌ Error: FTP_PASS is empty. Please check your .env file."
+    exit 1
+fi
+
+echo "✅ Environment loaded successfully for user: $FTP_USER"
 
 # We need lftp installed before using this
 
-FTP_USER="crm@adcrew.us"
-FTP_PASS="4RVFATKG23L93YCO2O"
-FTP_HOST="ftp://adcrew.us"
-REMOTE_DIR="/public_html/health-crm"
 LOCAL_DIR="$(pwd)"
 #!/bin/bash
-
-# =====================
-# Config - update this manually each release
-APP_VERSION="1.4.17"
-# =====================
 
 echo "Minifying..."
 
@@ -58,6 +63,15 @@ find dist -type f -name "*.html" | while read -r file; do
   # Remove test scripts
   run_sed "s|<script\s+src=\"\./test/[^>]+\.js\">\s*</script>||g" "$file"
 
+done
+
+find dist -type f -name "*.js" | while read -r file; do
+
+  echo "  📄 Processing: $file"
+
+  # Now replace with new version
+  run_sed "s|CONFIG_URL:\s*\"\s*\"|CONFIG_URL: \"$GOOGLE_SCRIPT_URL\"|g" "$file"
+  run_sed "s|CONFIG_SHEET_ID:\s*\"\s*\"|CONFIG_SHEET_ID: \"$GOOGLE_SCRIPT_SS_ID\"|g" "$file"
 done
 
 echo ""

@@ -175,7 +175,7 @@ function renderPostureReport(
       '">',
       ' <span style="',
       " font-size:10px;",
-      " font-weight:800;",
+      " font-weight:700;",
       " color:#fff;",
       " background:#1a3a6b;",
       " padding:3px 8px;",
@@ -370,7 +370,7 @@ function renderPostureReport(
         var borderLeft =
           i > 0 ? "border-left:1px solid rgba(255,255,255,.12);" : "";
         var valueStyle = item.highlight
-          ? "font-size:12px;font-weight:800;color:" +
+          ? "font-size:12px;font-weight:700;color:" +
             item.color.dot +
             ";letter-spacing:.5px;"
           : "font-size:12px;font-weight:700;color:#fff;";
@@ -520,13 +520,13 @@ function renderPostureReport(
           "border-bottom:1px solid " + overallColor.text + "33;",
           '">',
           ' <span style="',
-          " font-size:10px;font-weight:800;",
+          " font-size:10px;font-weight:700;",
           " color:" + overallColor.text + ";",
           " letter-spacing:1px;text-transform:uppercase;",
           " font-family:'Arial',sans-serif;",
           ' ">Kết quả tổng thể:</span>',
           ' <span style="',
-          " font-size:12px;font-weight:800;",
+          " font-size:12px;font-weight:700;",
           " color:" + overallColor.text + ";",
           " letter-spacing:.5px;",
           " font-family:'Arial',sans-serif;",
