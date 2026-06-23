@@ -24,14 +24,10 @@ async function switchRole(role) {
       return false;
     }
 
-    if (password === "ebBf~f5^'7BL(c&7+") {
-      authenticate = "admin";
-    } else if (password === "OBIMIN") {
-      authenticate = "user";
-    } else {
-      alert("Mật khẩu không chính xác. Truy cập bị từ chối.");
-      return false;
-    }
+// TODO: Thay đổi cơ chế xác thực thích hợp
+     // Hiện tại, từ chối tất cả các mật khẩu
+     alert("Xác thực chưa được triển khai. Vui lòng liên hệ quản trị.");
+     return false;
     localStorage.setItem("authenticate", authenticate);
   }
 

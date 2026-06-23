@@ -2,8 +2,8 @@
 // CONFIG & STATE
 // =====================
 const CONFIG = {
-  CONFIG_URL: "https://script.google.com/macros/s/AKfycbxiSHl_RQ1p2Z7CisbDtVzwoB0Q3hUgON1vkybD5B7ayexlphyfQtCC6FXyDBtvw8NP/exec",
-  CONFIG_SHEET_ID: "1iY0VJaIvLGDYi2A4TsBXAXu6jgTz-GhXd8p75Gpg4iw",
+  CONFIG_URL: "",
+  CONFIG_SHEET_ID: "",
 };
 
 var SYSTEM_PENDING_REQUESTS = 0;
